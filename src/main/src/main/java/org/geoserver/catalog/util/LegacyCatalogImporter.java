@@ -56,6 +56,8 @@ import org.opengis.referencing.operation.MathTransform;
  * @author Justin Deoliveira, The Open Planning Project
  */
 public class LegacyCatalogImporter {
+    private static final boolean VALIDATE_ENTITY =
+            "true".equals(System.getProperty("VALIDATE_ENTITY"));
 
     /** logger */
     static Logger LOGGER = Logging.getLogger("org.geoserver.catalog");
@@ -292,7 +294,8 @@ public class LegacyCatalogImporter {
             coverageStore.setWorkspace(catalog.getWorkspaceByName(namespacePrefix));
 
             coverageStore.setEnabled((Boolean) map.get("enabled"));
-            catalog.add(coverageStore);
+            // catalog.add(coverageStore);
+            catalog.add(coverageStore, VALIDATE_ENTITY);
 
             LOGGER.info(
                     "Processed coverage store '"
@@ -325,7 +328,8 @@ public class LegacyCatalogImporter {
             dataStore.getConnectionParameters().put("namespace", ns.getURI());
 
             dataStore.setEnabled((Boolean) map.get("enabled"));
-            catalog.add(dataStore);
+            // catalog.add(dataStore);
+            catalog.add(dataStore, VALIDATE_ENTITY);
 
             if (dataStore.isEnabled()) {
                 try {
@@ -357,7 +361,7 @@ public class LegacyCatalogImporter {
             style.setName((String) entry.getKey());
             style.setFilename((String) entry.getValue());
 
-            catalog.add(style);
+            catalog.add(style, VALIDATE_ENTITY);
             LOGGER.info("Loaded style '" + style.getName() + "'");
         }
     }
@@ -382,12 +386,12 @@ public class LegacyCatalogImporter {
             namespace.setPrefix((String) entry.getKey());
             namespace.setURI((String) entry.getValue());
             namespace.setIsolated(isolated);
-            catalog.add(namespace);
+            catalog.add(namespace, VALIDATE_ENTITY);
 
             WorkspaceInfo workspace = factory.createWorkspace();
             workspace.setName((String) entry.getKey());
             workspace.setIsolated(isolated);
-            catalog.add(workspace);
+            catalog.add(workspace, VALIDATE_ENTITY);
 
             if (namespace.getURI().equals(namespaces.get(""))) {
                 catalog.setDefaultNamespace(namespace);

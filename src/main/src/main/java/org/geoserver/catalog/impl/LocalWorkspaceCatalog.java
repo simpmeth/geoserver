@@ -308,6 +308,11 @@ public class LocalWorkspaceCatalog extends AbstractCatalogDecorator implements C
     }
 
     @Override
+    public void add(LayerInfo layer, boolean validate) {
+        super.add(unwrap(layer), validate);
+    }
+
+    @Override
     public void save(LayerInfo layer) {
         super.save(unwrap(layer));
     }

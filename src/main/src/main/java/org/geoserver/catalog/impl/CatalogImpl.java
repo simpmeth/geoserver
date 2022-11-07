@@ -186,6 +186,31 @@ public class CatalogImpl implements Catalog {
         added(added);
     }
 
+    @Override
+    public void add(StoreInfo store, boolean validate) {
+
+        if (store.getWorkspace() == null) {
+            store.setWorkspace(getDefaultWorkspace());
+        }
+
+        if (validate) validate(store, true);
+
+        // TODO: remove synchronized block, need transactions
+        StoreInfo added;
+        synchronized (facade) {
+            StoreInfo resolved = resolve(store);
+            beforeadded(resolved);
+            added = facade.add(resolved);
+
+            // if there is no default store use this one as the default
+            if (getDefaultDataStore(store.getWorkspace()) == null
+                    && store instanceof DataStoreInfo) {
+                setDefaultDataStore(store.getWorkspace(), (DataStoreInfo) store);
+            }
+        }
+        added(added);
+    }
+
     public ValidationResult validate(StoreInfo store, boolean isNew) {
         if (isNull(store.getName())) {
             throw new IllegalArgumentException("Store name must not be null");
@@ -408,6 +433,23 @@ public class CatalogImpl implements Catalog {
         }
         ResourceInfo resolved = resolve(resource);
         validate(resolved, true);
+        beforeadded(resolved);
+        ResourceInfo added = facade.add(resolved);
+        added(added);
+    }
+
+    public void add(ResourceInfo resource, boolean validate) {
+        if (resource.getNamespace() == null) {
+            // default to default namespace
+            resource.setNamespace(getDefaultNamespace());
+        }
+        if (resource.getNativeName() == null) {
+            resource.setNativeName(resource.getName());
+        }
+        ResourceInfo resolved = resolve(resource);
+
+        if (validate) validate(resolved, true);
+
         beforeadded(resolved);
         ResourceInfo added = facade.add(resolved);
         added(added);
@@ -677,6 +719,29 @@ public class CatalogImpl implements Catalog {
         added(added);
     }
 
+    public void add(LayerInfo layer, boolean validate) {
+        layer = resolve(layer);
+        if (validate) validate(layer, true);
+
+        if (layer.getType() == null) {
+            if (layer.getResource() instanceof FeatureTypeInfo) {
+                layer.setType(PublishedType.VECTOR);
+            } else if (layer.getResource() instanceof CoverageInfo) {
+                layer.setType(PublishedType.RASTER);
+            } else if (layer.getResource() instanceof WMTSLayerInfo) {
+                layer.setType(PublishedType.WMTS);
+            } else if (layer.getResource() instanceof WMSLayerInfo) {
+                layer.setType(PublishedType.WMS);
+            } else {
+                String msg = "Layer type not set and can't be derived from resource";
+                throw new IllegalArgumentException(msg);
+            }
+        }
+        beforeadded(layer);
+        LayerInfo added = facade.add(layer);
+        added(added);
+    }
+
     @SuppressFBWarnings("RCN_REDUNDANT_NULLCHECK_WOULD_HAVE_BEEN_A_NPE")
     public ValidationResult validate(LayerInfo layer, boolean isNew) {
         // TODO: bring back when the layer/publishing split is in act
@@ -845,6 +910,22 @@ public class CatalogImpl implements Catalog {
     public void add(LayerGroupInfo layerGroup) {
         layerGroup = resolve(layerGroup);
         validate(layerGroup, true);
+
+        if (layerGroup.getStyles().isEmpty()) {
+            for (PublishedInfo l : layerGroup.getLayers()) {
+                // default style
+                layerGroup.getStyles().add(null);
+            }
+        }
+        beforeadded(layerGroup);
+        LayerGroupInfo added = facade.add(layerGroup);
+        added(added);
+    }
+
+    @SuppressWarnings("PMD.UnusedLocalVariable")
+    public void add(LayerGroupInfo layerGroup, boolean validate) {
+        layerGroup = resolve(layerGroup);
+        if (validate) validate(layerGroup, true);
 
         if (layerGroup.getStyles().isEmpty()) {
             for (PublishedInfo l : layerGroup.getLayers()) {
@@ -1182,6 +1263,22 @@ public class CatalogImpl implements Catalog {
         added(added);
     }
 
+    public void add(NamespaceInfo namespace, boolean validate) {
+        if (validate) validate(namespace, true);
+
+        NamespaceInfo added;
+        synchronized (facade) {
+            final NamespaceInfo resolved = resolve(namespace);
+            beforeadded(namespace);
+            added = facade.add(resolved);
+            if (getDefaultNamespace() == null) {
+                setDefaultNamespace(resolved);
+            }
+        }
+
+        added(added);
+    }
+
     public ValidationResult validate(NamespaceInfo namespace, boolean isNew) {
 
         if (namespace.isIsolated() && !getCatalogCapabilities().supportsIsolatedWorkspaces()) {
@@ -1297,6 +1394,28 @@ public class CatalogImpl implements Catalog {
     public void add(WorkspaceInfo workspace) {
         workspace = resolve(workspace);
         validate(workspace, true);
+
+        if (getWorkspaceByName(workspace.getName()) != null) {
+            throw new IllegalArgumentException(
+                    "Workspace with name '" + workspace.getName() + "' already exists.");
+        }
+
+        WorkspaceInfo added;
+        synchronized (facade) {
+            beforeadded(workspace);
+            added = facade.add(workspace);
+            // if there is no default workspace use this one as the default
+            if (getDefaultWorkspace() == null) {
+                setDefaultWorkspace(workspace);
+            }
+        }
+
+        added(added);
+    }
+
+    public void add(WorkspaceInfo workspace, boolean validate) {
+        workspace = resolve(workspace);
+        if (validate) validate(workspace, true);
 
         if (getWorkspaceByName(workspace.getName()) != null) {
             throw new IllegalArgumentException(
@@ -1498,6 +1617,16 @@ public class CatalogImpl implements Catalog {
     public void add(StyleInfo style) {
         style = resolve(style);
         validate(style, true);
+        // set creation time before persisting
+        beforeadded(style);
+        StyleInfo added = facade.add(style);
+        added(added);
+    }
+
+    @Override
+    public void add(StyleInfo style, boolean validate) {
+        style = resolve(style);
+        if (validate) validate(style, true);
         // set creation time before persisting
         beforeadded(style);
         StyleInfo added = facade.add(style);

@@ -1162,6 +1162,11 @@ public class SecureCatalogImpl extends AbstractDecorator<Catalog> implements Cat
         delegate.add(unwrap(layerGroup));
     }
 
+    @Override
+    public void add(LayerGroupInfo layerGroup, boolean validate) {
+        delegate.add(unwrap(layerGroup), validate);
+    }
+
     public ValidationResult validate(LayerGroupInfo layerGroup, boolean isNew) {
         return delegate.validate(unwrap(layerGroup), isNew);
     }
@@ -1171,6 +1176,11 @@ public class SecureCatalogImpl extends AbstractDecorator<Catalog> implements Cat
     }
 
     public void add(LayerInfo layer) {
+        delegate.add(unwrap(layer));
+    }
+
+    @Override
+    public void add(LayerInfo layer, boolean validate) {
         delegate.add(unwrap(layer));
     }
 
@@ -1194,6 +1204,11 @@ public class SecureCatalogImpl extends AbstractDecorator<Catalog> implements Cat
         delegate.add(namespace);
     }
 
+    @Override
+    public void add(NamespaceInfo namespace, boolean validate) {
+        delegate.add(namespace, validate);
+    }
+
     public ValidationResult validate(NamespaceInfo namespace, boolean isNew) {
         return delegate.validate(namespace, isNew);
     }
@@ -1204,6 +1219,11 @@ public class SecureCatalogImpl extends AbstractDecorator<Catalog> implements Cat
 
     public void add(ResourceInfo resource) {
         delegate.add(unwrap(resource));
+    }
+
+    @Override
+    public void add(ResourceInfo resource, boolean validate) {
+        delegate.add(unwrap(resource), validate);
     }
 
     public ValidationResult validate(ResourceInfo resource, boolean isNew) {
@@ -1218,6 +1238,11 @@ public class SecureCatalogImpl extends AbstractDecorator<Catalog> implements Cat
         delegate.add(unwrap(store));
     }
 
+    @Override
+    public void add(StoreInfo store, boolean validate) {
+        delegate.add(unwrap(store), validate);
+    }
+
     public ValidationResult validate(StoreInfo store, boolean isNew) {
         return delegate.validate(unwrap(store), isNew);
     }
@@ -1230,6 +1255,11 @@ public class SecureCatalogImpl extends AbstractDecorator<Catalog> implements Cat
         delegate.add(style);
     }
 
+    @Override
+    public void add(StyleInfo style, boolean validate) {
+        delegate.add(style, validate);
+    }
+
     public ValidationResult validate(StyleInfo style, boolean isNew) {
         return delegate.validate(style, isNew);
     }
@@ -1240,6 +1270,11 @@ public class SecureCatalogImpl extends AbstractDecorator<Catalog> implements Cat
 
     public void add(WorkspaceInfo workspace) {
         delegate.add(workspace);
+    }
+
+    @Override
+    public void add(WorkspaceInfo workspace, boolean validate) {
+        delegate.add(workspace, validate);
     }
 
     public ValidationResult validate(WorkspaceInfo workspace, boolean isNew) {

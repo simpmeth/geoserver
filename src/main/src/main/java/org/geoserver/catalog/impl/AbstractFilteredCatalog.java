@@ -474,6 +474,10 @@ public abstract class AbstractFilteredCatalog extends AbstractDecorator<Catalog>
         delegate.add(layerGroup);
     }
 
+    public void add(LayerGroupInfo layerGroup, boolean validate) {
+        delegate.add(layerGroup, validate);
+    }
+
     public ValidationResult validate(LayerGroupInfo layerGroup, boolean isNew) {
         return delegate.validate(layerGroup, isNew);
     }
@@ -484,6 +488,10 @@ public abstract class AbstractFilteredCatalog extends AbstractDecorator<Catalog>
 
     public void add(LayerInfo layer) {
         delegate.add(layer);
+    }
+
+    public void add(LayerInfo layer, boolean validate) {
+        delegate.add(layer, validate);
     }
 
     public LayerInfo detach(LayerInfo layer) {
@@ -506,6 +514,10 @@ public abstract class AbstractFilteredCatalog extends AbstractDecorator<Catalog>
         delegate.add(namespace);
     }
 
+    public void add(NamespaceInfo namespace, boolean validate) {
+        delegate.add(namespace, validate);
+    }
+
     public ValidationResult validate(NamespaceInfo namespace, boolean isNew) {
         return delegate.validate(namespace, isNew);
     }
@@ -516,6 +528,10 @@ public abstract class AbstractFilteredCatalog extends AbstractDecorator<Catalog>
 
     public void add(ResourceInfo resource) {
         delegate.add(resource);
+    }
+
+    public void add(ResourceInfo resource, boolean validate) {
+        delegate.add(resource, validate);
     }
 
     public ValidationResult validate(ResourceInfo resource, boolean isNew) {
@@ -530,6 +546,10 @@ public abstract class AbstractFilteredCatalog extends AbstractDecorator<Catalog>
         delegate.add(store);
     }
 
+    public void add(StoreInfo store, boolean validate) {
+        delegate.add(store, validate);
+    }
+
     public ValidationResult validate(StoreInfo store, boolean isNew) {
         return delegate.validate(store, isNew);
     }
@@ -542,6 +562,10 @@ public abstract class AbstractFilteredCatalog extends AbstractDecorator<Catalog>
         delegate.add(style);
     }
 
+    public void add(StyleInfo style, boolean validate) {
+        delegate.add(style, validate);
+    }
+
     public ValidationResult validate(StyleInfo style, boolean isNew) {
         return delegate.validate(style, isNew);
     }
@@ -552,6 +576,10 @@ public abstract class AbstractFilteredCatalog extends AbstractDecorator<Catalog>
 
     public void add(WorkspaceInfo workspace) {
         delegate.add(workspace);
+    }
+
+    public void add(WorkspaceInfo workspace, boolean validate) {
+        delegate.add(workspace, validate);
     }
 
     public ValidationResult validate(WorkspaceInfo workspace, boolean isNew) {

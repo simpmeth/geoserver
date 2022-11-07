@@ -154,6 +154,8 @@ public interface Catalog extends CatalogInfo {
     /** Adds a new store. */
     void add(StoreInfo store);
 
+    void add(StoreInfo store, boolean validate);
+
     /**
      * Validate a store.
      *
@@ -578,6 +580,8 @@ public interface Catalog extends CatalogInfo {
     /** Adds a new resource. */
     void add(ResourceInfo resource);
 
+    void add(ResourceInfo resource, boolean validate);
+
     /**
      * Validate a resource.
      *
@@ -953,6 +957,8 @@ public interface Catalog extends CatalogInfo {
     /** Adds a new layer. */
     void add(LayerInfo layer);
 
+    void add(LayerInfo layer, boolean validate);
+
     /**
      * Validate a layer.
      *
@@ -1069,6 +1075,8 @@ public interface Catalog extends CatalogInfo {
     /** Adds a layer group to the catalog. */
     void add(LayerGroupInfo layerGroup);
 
+    void add(LayerGroupInfo layerGroup, boolean validate);
+
     /**
      * Validate a layergroup.
      *
@@ -1155,6 +1163,8 @@ public interface Catalog extends CatalogInfo {
 
     /** Adds a new style. */
     void add(StyleInfo style);
+
+    void add(StyleInfo style, boolean validate);
 
     /**
      * Validate a style.
@@ -1244,6 +1254,8 @@ public interface Catalog extends CatalogInfo {
     /** Adds a new namespace. */
     void add(NamespaceInfo namespace);
 
+    void add(NamespaceInfo namespace, boolean validate);
+
     /**
      * Validate a namespace.
      *
@@ -1311,6 +1323,8 @@ public interface Catalog extends CatalogInfo {
 
     /** Adds a new workspace */
     void add(WorkspaceInfo workspace);
+
+    void add(WorkspaceInfo workspace, boolean validate);
 
     /**
      * Validate a workspace.

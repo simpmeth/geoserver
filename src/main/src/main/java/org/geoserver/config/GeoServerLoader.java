@@ -74,6 +74,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
  */
 public abstract class GeoServerLoader {
 
+    private static final boolean VALIDATE_ENTITY =
+            "true".equals(System.getProperty("VALIDATE_ENTITY"));
     static Logger LOGGER = Logging.getLogger("org.geoserver");
 
     /** Workspace IO resources */
@@ -198,7 +200,7 @@ public abstract class GeoServerLoader {
             T ft = null;
             try {
                 ft = depersist(xp, lc.contents, clazz);
-                catalog.add(ft);
+                catalog.add(ft, VALIDATE_ENTITY);
             } catch (Exception e) {
                 LOGGER.log(Level.WARNING, "Failed to load resource", e);
                 return;
@@ -220,7 +222,7 @@ public abstract class GeoServerLoader {
 
             try {
                 LayerInfo l = depersist(xp, lc.layerContents, LayerInfo.class);
-                catalog.add(l);
+                catalog.add(l, VALIDATE_ENTITY);
 
                 LOGGER.info("Loaded layer '" + l.getName() + "'");
 
@@ -446,6 +448,7 @@ public abstract class GeoServerLoader {
             // assume 2.x style data directory
             Stopwatch sw = Stopwatch.createStarted();
             LOGGER.info("Loading catalog...");
+            LOGGER.info("Validation entity is " + (VALIDATE_ENTITY ? "enabled" : "disabled"));
             catalog2 = (CatalogImpl) readCatalog(xp);
             LOGGER.info("Read catalog in " + sw.stop());
         } else {
@@ -534,7 +537,7 @@ public abstract class GeoServerLoader {
                     final Resource workspaceResource = wc.resource;
                     try {
                         ws = depersist(xp, wc.contents, WorkspaceInfo.class);
-                        catalog.add(ws);
+                        catalog.add(ws, VALIDATE_ENTITY);
                         if (LOGGER.isLoggable(Level.INFO)) {
                             LOGGER.info("Loaded workspace '" + ws.getName() + "'");
                         }
@@ -550,7 +553,7 @@ public abstract class GeoServerLoader {
                     NamespaceInfo ns = null;
                     try {
                         ns = depersist(xp, wc.nsContents, NamespaceInfo.class);
-                        catalog.add(ns);
+                        catalog.add(ns, VALIDATE_ENTITY);
                     } catch (Exception e) {
                         LOGGER.log(
                                 Level.WARNING,
@@ -677,7 +680,7 @@ public abstract class GeoServerLoader {
         WMSStoreInfo wms = null;
         try {
             wms = depersist(xp, SingleResourceContents.contents, WMSStoreInfo.class);
-            catalog.add(wms);
+            catalog.add(wms, VALIDATE_ENTITY);
 
             LOGGER.info(
                     "Loaded wmsstore '"
@@ -712,7 +715,7 @@ public abstract class GeoServerLoader {
         WMTSStoreInfo wmts = null;
         try {
             wmts = depersist(xp, SingleResourceContents.contents, WMTSStoreInfo.class);
-            catalog.add(wmts);
+            catalog.add(wmts, VALIDATE_ENTITY);
 
             LOGGER.info("Loaded wmtsstore '" + wmts.getName() + "'");
         } catch (Exception e) {
@@ -744,7 +747,7 @@ public abstract class GeoServerLoader {
         final Resource storeResource = SingleResourceContents.resource;
         try {
             cs = depersist(xp, SingleResourceContents.contents, CoverageStoreInfo.class);
-            catalog.add(cs);
+            catalog.add(cs, VALIDATE_ENTITY);
 
             if (LOGGER.isLoggable(Level.INFO)) {
                 LOGGER.info(
@@ -785,7 +788,7 @@ public abstract class GeoServerLoader {
         DataStoreInfo ds;
         try {
             ds = depersist(xp, SingleResourceContents.contents, DataStoreInfo.class);
-            catalog.add(ds);
+            catalog.add(ds, VALIDATE_ENTITY);
 
             if (LOGGER.isLoggable(Level.INFO)) {
                 LOGGER.info(
@@ -1012,7 +1015,7 @@ public abstract class GeoServerLoader {
                 SingleResourceContents r = it.next();
                 try {
                     StyleInfo s = depersist(xp, r.contents, StyleInfo.class);
-                    catalog.add(s);
+                    catalog.add(s, VALIDATE_ENTITY);
 
                     if (LOGGER.isLoggable(Level.INFO)) {
                         LOGGER.info("Loaded style '" + s.getName() + "'");

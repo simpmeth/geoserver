@@ -82,6 +82,11 @@ public class AbstractCatalogDecorator extends AbstractDecorator<Catalog> impleme
         delegate.add(store);
     }
 
+    @Override
+    public void add(StoreInfo store, boolean validate) {
+        delegate.add(store, validate);
+    }
+
     public void remove(StoreInfo store) {
         delegate.remove(store);
     }
@@ -199,6 +204,11 @@ public class AbstractCatalogDecorator extends AbstractDecorator<Catalog> impleme
     //
     public void add(ResourceInfo resource) {
         delegate.add(resource);
+    }
+
+    @Override
+    public void add(ResourceInfo resource, boolean validate) {
+        delegate.add(resource, validate);
     }
 
     public void remove(ResourceInfo resource) {
@@ -340,6 +350,11 @@ public class AbstractCatalogDecorator extends AbstractDecorator<Catalog> impleme
         delegate.add(layer);
     }
 
+    @Override
+    public void add(LayerInfo layer, boolean validate) {
+        delegate.add(layer, validate);
+    }
+
     public void remove(LayerInfo layer) {
         delegate.remove(layer);
     }
@@ -422,6 +437,11 @@ public class AbstractCatalogDecorator extends AbstractDecorator<Catalog> impleme
         delegate.add(layerGroup);
     }
 
+    @Override
+    public void add(LayerGroupInfo layerGroup, boolean validate) {
+        delegate.add(layerGroup, validate);
+    }
+
     public void remove(LayerGroupInfo layerGroup) {
         delegate.remove(layerGroup);
     }
@@ -471,6 +491,11 @@ public class AbstractCatalogDecorator extends AbstractDecorator<Catalog> impleme
     //
     public void add(StyleInfo style) {
         delegate.add(style);
+    }
+
+    @Override
+    public void add(StyleInfo style, boolean validate) {
+        delegate.add(style, validate);
     }
 
     public void remove(StyleInfo style) {
@@ -524,6 +549,11 @@ public class AbstractCatalogDecorator extends AbstractDecorator<Catalog> impleme
         delegate.add(namespace);
     }
 
+    @Override
+    public void add(NamespaceInfo namespace, boolean validate) {
+        delegate.add(namespace, validate);
+    }
+
     public void remove(NamespaceInfo namespace) {
         delegate.remove(namespace);
     }
@@ -569,6 +599,11 @@ public class AbstractCatalogDecorator extends AbstractDecorator<Catalog> impleme
     //
     public void add(WorkspaceInfo workspace) {
         delegate.add(workspace);
+    }
+
+    @Override
+    public void add(WorkspaceInfo workspace, boolean validate) {
+        delegate.add(workspace, validate);
     }
 
     public void remove(WorkspaceInfo workspace) {
